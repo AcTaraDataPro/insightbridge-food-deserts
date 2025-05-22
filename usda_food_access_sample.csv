@@ -1,0 +1,4 @@
+CensusTract,State,County,LILATracts_1And10,Population,MedianFamilyIncome,TractLOWI,TractHUNVFlag,TractSNAP
+1001001,AL,Autauga,1,2000,45000,1000,1,0.2
+1001002,AL,Autauga,0,1500,47000,800,0,0.1
+1001003,AL,Autauga,1,1800,43000,900,1,0.3
