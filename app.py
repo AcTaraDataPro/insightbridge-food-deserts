@@ -3,7 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import openai
 
-# Load data
 @st.cache_data
 def load_data():
     return pd.read_csv("usda_food_access_full.csv")
@@ -67,25 +66,17 @@ with col2:
     if st.button("Get Answer") and openai_key and user_question:
         openai.api_key = openai_key
         context_summary = filtered_df.describe(include='all').to_string()
+        prompt = f"Data context:
+{context_summary}
+
+User question: {user_question}"
 
         try:
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[
                     {"role": "system", "content": "You are an assistant helping explain public health data related to food access."},
-                    {"role": "user", "content": f"Data context:
-context_summary = filtered_df.describe(include='all').to_string()
-
-response = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo",
-    messages=[
-        {"role": "system", "content": "You are an assistant helping explain public health data related to food access."},
-        {"role": "user", "content": f"Data context:\n{context_summary}\n\nUser question: {user_question}"}
-    ]
-)
-
-
-User question: {user_question}"}
+                    {"role": "user", "content": prompt}
                 ]
             )
             st.success(response.choices[0].message["content"])
