@@ -2,10 +2,9 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Load data
 @st.cache_data
 def load_data():
-    return pd.read_csv("usda_food_access_sample.csv")
+    return pd.read_csv("usda_food_access_full.csv")
 
 df = load_data()
 
@@ -30,10 +29,9 @@ filtered_df = df[
 ]
 
 # Main app
-st.title("🍎 InsightBridge: Food Desert Analysis")
+st.title("🍎 InsightBridge: Food Desert Explorer")
 st.subheader(f"{selected_county} County, {selected_state}")
 
-# Pie chart
 if not filtered_df.empty:
     sizes = filtered_df["LILATracts_1And10"].value_counts().sort_index()
     labels = ["Not Food Desert", "Food Desert"] if 0 in sizes.index else ["Food Desert"]
@@ -42,7 +40,7 @@ if not filtered_df.empty:
     ax.axis("equal")
     st.pyplot(fig)
 
-    # Summary
+    # Insight summary
     num_tracts = len(filtered_df)
     num_food_deserts = filtered_df["LILATracts_1And10"].sum()
     snap_avg = filtered_df["TractSNAP"].mean() * 100
@@ -51,9 +49,8 @@ if not filtered_df.empty:
     st.markdown("### 🧠 Insight")
     st.success(
         f"In {selected_county} County, {selected_state}, {num_food_deserts} out of {num_tracts} census tracts "
-        f"are identified as food deserts (low-income and low-access). The average SNAP participation rate is "
-        f"{snap_avg:.1f}%, and {vehicle_access} tracts have limited vehicle access, indicating potential mobility "
-        f"challenges for food-insecure populations."
+        f"are identified as food deserts. The average SNAP participation rate is {snap_avg:.1f}%, and "
+        f"{vehicle_access} tracts have limited vehicle access, indicating food access mobility challenges."
     )
 else:
     st.warning("No data available for selected filters.")
