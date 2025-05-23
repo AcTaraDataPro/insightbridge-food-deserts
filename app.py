@@ -74,7 +74,16 @@ with col2:
                 messages=[
                     {"role": "system", "content": "You are an assistant helping explain public health data related to food access."},
                     {"role": "user", "content": f"Data context:
-{context_summary}
+context_summary = filtered_df.describe(include='all').to_string()
+
+response = openai.ChatCompletion.create(
+    model="gpt-3.5-turbo",
+    messages=[
+        {"role": "system", "content": "You are an assistant helping explain public health data related to food access."},
+        {"role": "user", "content": f"Data context:\n{context_summary}\n\nUser question: {user_question}"}
+    ]
+)
+
 
 User question: {user_question}"}
                 ]
